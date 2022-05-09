@@ -3,6 +3,12 @@
 
 class Fruit : public Cargo {
 public:
+    Fruit(size_t amount, const std::string& name, 
+		size_t basePrice, size_t timeToSpoil, size_t expiryDate);
+
+	~Fruit() override;
+
+    std::ostream& print(std::ostream& os) const override;
     Fruit& operator--();
     size_t getPrice() const override;
     std::string getName() const override;
@@ -13,7 +19,7 @@ public:
     bool operator==(Cargo& cargo) const override;
     size_t timeToSpoil() const override;
 protected:
-    size_t timeToSpoil_{10}; 
-    const size_t expiry_date_{10};
+    size_t timeToSpoil_; 
+    const size_t expiryDate_;
 };
 

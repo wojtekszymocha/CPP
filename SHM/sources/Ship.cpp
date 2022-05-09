@@ -1,6 +1,15 @@
  #include "Ship.hpp"
  #include <algorithm>
-  
+
+Ship::Ship(int capacity, int crew, int speed, 
+	std::string name, size_t id) :
+		capacity_(capacity),
+		crew_(crew),
+		speed_(speed),
+		name_(name),
+		id_(id) {
+}
+
 int Ship::getId() const { return id_; }
 std::string Ship::getName() const { return name_; }
 size_t Ship::getSpeed() const { return speed_; }
@@ -31,14 +40,19 @@ Ship& Ship::operator-=(const int crew) {
 std::shared_ptr<Cargo> Ship::getCargo(const size_t index)const {
     return cargos_[index];
 }
-void Ship::load(const std::shared_ptr<Cargo>& Cargo){
+void Ship::load(std::shared_ptr<Cargo>& Cargo){
     cargos_.push_back(Cargo);
 }
-void Ship::unload(const std::shared_ptr<Cargo>& Cargo){
-    auto it = find_if(begin(cargos_),end(cargos_),[Cargo](const auto& ptr){
-        ptr.get() == Cargo;
-    });
-    if(it != cargos_.end())
-        cargos_.erase(it);
+void Ship::unload(Cargo* Cargo){
+    if(Cargo->getAmount() == 0){
+        RemoveFromStorage(Cargo);
+    }
+}
+
+void Ship::RemoveFromStorage(Cargo* cargo) {
+	cargos_.erase(std::find_if(std::begin(cargos_), std::end(cargos_),
+		[cargo](const auto& el) {
+		return *el == *cargo;
+	}));
 }
 

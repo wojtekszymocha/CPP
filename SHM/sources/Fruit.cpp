@@ -1,5 +1,18 @@
 #include "Fruit.hpp"
 
+Fruit::Fruit(size_t amount, const std::string& name, size_t basePrice, size_t timeToSpoil,
+			 size_t expiryDate) :
+	Cargo(amount, name, basePrice),
+	timeToSpoil_(timeToSpoil), expiryDate_(expiryDate) {
+
+}
+
+std::ostream& Fruit::print(std::ostream& os) const {
+	return os << "Name: " << name_ << " | amount: " << amount_ 
+    << " | expirt date: " << expiryDate_ 
+	<< " | time to spoil: " << expiryDate_ - timeToSpoil_; 
+}
+
 Fruit& Fruit::operator--(){
         if(timeToSpoil_ == 0){
             return *this;
@@ -9,7 +22,7 @@ Fruit& Fruit::operator--(){
 }
 
 size_t Fruit::getPrice() const {
-    return base_price_ * (timeToSpoil_/expiry_date_);
+    return basePrice_ * (timeToSpoil_/expiryDate_);
 }
 
 std::string Fruit::getName() const {       
@@ -21,7 +34,7 @@ size_t Fruit::getAmount() const {
 }
 
 size_t Fruit::getBasePrice() const {
-    return base_price_;
+    return basePrice_;
 }
 
 Cargo& Fruit::operator+=(const size_t amount){
@@ -42,8 +55,8 @@ bool Fruit::operator==(Cargo& cargo) const {
    if (typeid(*this) != typeid(cargo))
 		return false;
 		
-	auto item = dynamic_cast<const Fruit&>(cargo);
-	return item.getBasePrice() == base_price_
+	auto& item = dynamic_cast<const Fruit&>(cargo);
+	return item.getBasePrice() == basePrice_
 		&& item.getName() == name_;
 }
 

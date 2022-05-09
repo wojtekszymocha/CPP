@@ -8,7 +8,11 @@ public:
             rare = 5,
             epic = 8,
             legendary = 10 };
-    
+
+    Item(size_t amount, const std::string& name, size_t base_price, Rarity rarity);
+	~Item() override = default;
+
+    std::ostream& print(std::ostream& os) const override;
     size_t getPrice() const override;
     std::string getName() const override;
     size_t getAmount() const override;
