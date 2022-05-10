@@ -21,6 +21,7 @@ public:
     Cargo& operator-=(size_t amount) override;
     bool operator==(Cargo& cargo) const override;
     Rarity getRarity() const;
+    size_t timeToSpoil() const override;
 private:
     const Rarity rarity_;
 };

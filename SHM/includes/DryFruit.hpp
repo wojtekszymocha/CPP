@@ -5,7 +5,7 @@ public:
     DryFruit(size_t amount, const std::string& name, 
 		size_t basePrice, size_t timeToSpoil, size_t expiry_date);
 	
-	~DryFruit() override;
+	~DryFruit() override = default;
 
     std::ostream& print(std::ostream& os) const override;
     DryFruit& operator--();

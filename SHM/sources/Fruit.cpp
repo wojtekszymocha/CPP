@@ -55,12 +55,19 @@ bool Fruit::operator==(Cargo& cargo) const {
    if (typeid(*this) != typeid(cargo))
 		return false;
 		
-	auto& item = dynamic_cast<const Fruit&>(cargo);
-	return item.getBasePrice() == basePrice_
-		&& item.getName() == name_;
+	auto fruitCheck = dynamic_cast<const Fruit*>(&cargo);
+	 return name_ == fruitCheck->getName() &&
+            amount_ == fruitCheck->getAmount() &&
+            basePrice_ == fruitCheck->getBasePrice() &&
+            expiryDate_ == fruitCheck->expiryDate() &&
+            timeToSpoil_ == fruitCheck->timeToSpoil();
 }
 
 size_t Fruit::timeToSpoil() const{
     return timeToSpoil_;
+}
+
+size_t Fruit::expiryDate() const {
+    return expiryDate_;
 }
 

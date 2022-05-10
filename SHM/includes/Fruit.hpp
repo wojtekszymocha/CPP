@@ -6,7 +6,7 @@ public:
     Fruit(size_t amount, const std::string& name, 
 		size_t basePrice, size_t timeToSpoil, size_t expiryDate);
 
-	~Fruit() override;
+	~Fruit() override = default;
 
     std::ostream& print(std::ostream& os) const override;
     Fruit& operator--();
@@ -18,6 +18,7 @@ public:
     Cargo& operator-=(size_t amount) override;
     bool operator==(Cargo& cargo) const override;
     size_t timeToSpoil() const override;
+    size_t expiryDate() const;
 protected:
     size_t timeToSpoil_; 
     const size_t expiryDate_;

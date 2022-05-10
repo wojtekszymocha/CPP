@@ -1,5 +1,6 @@
  #include "Ship.hpp"
  #include <algorithm>
+ #include <numeric>
 
 Ship::Ship(int capacity, int crew, int speed, 
 	std::string name, size_t id) :
@@ -8,6 +9,10 @@ Ship::Ship(int capacity, int crew, int speed,
 		speed_(speed),
 		name_(name),
 		id_(id) {
+}
+
+Ship::~Ship(){
+
 }
 
 int Ship::getId() const { return id_; }
@@ -38,21 +43,37 @@ Ship& Ship::operator-=(const int crew) {
 } 
 
 std::shared_ptr<Cargo> Ship::getCargo(const size_t index)const {
-    return cargos_[index];
+    if (cargos_.size() > index)
+		return cargos_[index];
+	return nullptr;
 }
-void Ship::load(std::shared_ptr<Cargo>& Cargo){
-    cargos_.push_back(Cargo);
+void Ship::load(std::unique_ptr<Cargo> cargo) {
+	
+	if (auto match_cargo = findMatchCargo(cargo.get())) {
+		*match_cargo += cargo->getAmount();
+		return;
+	}
+	cargos_.push_back(std::move(cargo));
 }
-void Ship::unload(Cargo* Cargo){
-    if(Cargo->getAmount() == 0){
-        RemoveFromStorage(Cargo);
+void Ship::unload(Cargo* cargo) {
+    if(cargo->getAmount() == 0) {
+        removeFromStorage(cargo);
     }
 }
 
-void Ship::RemoveFromStorage(Cargo* cargo) {
+void Ship::removeFromStorage(Cargo* cargo) {
 	cargos_.erase(std::find_if(std::begin(cargos_), std::end(cargos_),
 		[cargo](const auto& el) {
 		return *el == *cargo;
 	}));
+    
+}
+
+Cargo* Ship::findMatchCargo(Cargo* cargo) {
+	auto match_cargo = std::find_if(std::begin(cargos_), std::end(cargos_),
+		[cargo](const auto& el) {
+		return *el == *cargo;
+	});
+	return match_cargo != std::end(cargos_) ? match_cargo->get() : nullptr;
 }
 

@@ -14,8 +14,8 @@ public:
     Ship& operator+=(const int crew); 
     Ship& operator-=(const int crew); 
     void setName(const std::string& name) { name_ = name; }
-    void load(std::shared_ptr<Cargo>& Cargo);
-    void unload(Cargo* Cargo);
+    void load(std::unique_ptr<Cargo> cargo);
+    void unload( Cargo* cargo);
     int getId() const;
     std::string getName() const;
     size_t getSpeed() const;
@@ -26,7 +26,8 @@ public:
     
 
 private:
-    void RemoveFromStorage(Cargo* cargo);    
+    void removeFromStorage(Cargo* cargo);    
+    Cargo* findMatchCargo(Cargo* cargo);
 
     const int id_;
     std::string name_;

@@ -1,10 +1,13 @@
 #include "Item.hpp"
 #include <typeinfo>
 
-Item::Item(size_t amount, const std::string& name, size_t base_price, Rarity rarity) :
-	Cargo(amount, name, base_price),
-	rarity_(rarity) {
+Item::Item(size_t amount, const std::string& name, size_t base_price, Rarity rarity) 
+	: Cargo(amount, name, base_price), rarity_(rarity) {
 
+}
+
+size_t Item::timeToSpoil() const {
+	return 0;
 }
 
 std::ostream& operator<<(std::ostream& os, const Item::Rarity& rarity) {
@@ -27,6 +30,11 @@ std::ostream& operator<<(std::ostream& os, const Item::Rarity& rarity) {
 		break;
 	}
 	return os;
+}
+
+std::ostream& Item::print(std::ostream& os) const {
+	return os << "Name: " << name_ << " | amount: " << amount_ 
+	<< " | rarity: " << rarity_;
 }
 
 size_t Item::getPrice()const {
@@ -57,12 +65,13 @@ Cargo& Item::operator-=(const size_t amount){
     return *this;
 }
 bool Item::operator==(Cargo& cargo) const {
-    if (typeid(*this) != typeid(cargo))
+    if (typeid(cargo) != typeid(Item&))
 		return false;
 		
-	auto& item = dynamic_cast<const Item&>(cargo);
-	return item.getBasePrice() == basePrice_
-		&& item.getName() == name_
-		&& item.getRarity() == rarity_;
+	auto item = dynamic_cast<const Item*>(&cargo);
+	return name_ == item->getName() &&
+           amount_ == item->getAmount() &&
+           basePrice_ == item->getBasePrice() &&
+           rarity_ == item->getRarity();
 }
 

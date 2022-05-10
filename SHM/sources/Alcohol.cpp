@@ -46,9 +46,10 @@ bool Alcohol::operator==(Cargo& cargo) const {
     if (typeid(*this) != typeid(cargo))
 		return false;
 		
-	auto& item = dynamic_cast<const Alcohol&>(cargo);
-	return item.getBasePrice() == basePrice_
-		&& item.getName() == name_
-		&& item.getPercentage() == percentOfAlcohol_;
+	auto alcoToCheck = dynamic_cast<const Alcohol*>(&cargo);
+	return  basePrice_==  alcoToCheck->getBasePrice() && 
+		    name_ == alcoToCheck->getName() &&
+            amount_ == alcoToCheck->getAmount() &&
+	        percentOfAlcohol_ == alcoToCheck->getPercentage();
 }
 
