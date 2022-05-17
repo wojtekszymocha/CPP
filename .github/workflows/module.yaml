@@ -1,0 +1,26 @@
+name: C++ with CMake CI
+
+on: [push, pull_request]
+
+jobs:
+  SHM:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Check out code
+      uses: actions/checkout@master
+    - name: mkdir SHM/build 
+      run: mkdir SHM/build 
+    - name: Compile
+      working-directory: SHM/build 
+      run: |
+        cmake ..
+        make
+    - name: Run test 
+      working-directory: SHM/build
+      run: ctest -V
+    - name: Run Valgrind
+      working-directory: SHM/build 
+      run: |
+          sudo apt-get update -y
+          sudo apt-get install -y valgrind
+          valgrind --leak-check=yes ./SHM-ut
